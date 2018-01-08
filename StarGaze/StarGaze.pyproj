@@ -6,6 +6,7 @@
     <RootNamespace>StarGaze</RootNamespace>
     <InterpreterId>{28f8e7fe-d292-4f88-aa0f-1a7f2e12924a}</InterpreterId>
     <InterpreterVersion>2.7</InterpreterVersion>
+    <NameOfLastUsedPublishProfile>StarGaze - Web Deploy</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -44,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
+    <None Include="StarGaze - Web Deploy.pubxml" />
     <Content Include="StarGaze\static\css\alchemy.css" />
     <Content Include="StarGaze\static\css\style.css" />
     <Content Include="StarGaze\static\css\vendor.css" />

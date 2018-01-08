@@ -312,8 +312,7 @@ Ext.define('Directions', {
                     scope: this,
 
                     layout: {
-                        align: 'center',
-                        pack: 'center'
+                        type: 'vbox'
                     },
                     items: [
                         {
@@ -366,7 +365,7 @@ Ext.define('Directions', {
                                         var tr = document.createElement('tr');
                                         var td = document.createElement('td');
 
-                                        td.innerHTML = "<b>" + only_dirs[i].name + "</b>";
+                                        td.innerHTML = only_dirs[i].name;
                                         tr.appendChild(td);
 
                                         for (var j = 0; j < only_dirs.length; j++) {
@@ -399,234 +398,244 @@ Ext.define('Directions', {
                                     }
 
                                     div.appendChild(matrix);
-                                    var next_step = document.createElement('button');
-                                    next_step.innerText = 'Готово';
-                                    next_step.onclick = function (e) {
-                                        matrix.style.visibility = false;
-
-                                        var data = {
-                                            "nodes": [],
-                                            "edges": [],
-                                        };
-
-                                        for (var i = 0; i < only_dirs.length; i++) {
-                                            data['nodes'].push({
-                                                "id": i,
-                                                "title": only_dirs[i]["name"],
-                                                "node_type": only_dirs[i]["group"],
-                                                "type": only_dirs[i]["group"],
-                                            });
-
-                                            for (var j = 0; j < only_dirs[i]["influences"].length; j++) {
-                                                var influence = only_dirs[i]["influences"][j];
-                                                data["edges"].push({
-                                                    "source": i,
-                                                    "target": only_dirs.findIndex(p => p.name == influence)
-                                                });
-                                            }
-                                        }
-
-                                        var alch = document.getElementById("alchemy");
-                                        while (alch.childElementCount > 0)
-                                            alch.removeChild(alch.firstElementChild);
-
-                                        alchemy = new Alchemy({
-                                            dataSource: data,
-                                            nodeCaption: "title",
-                                            nodeCaptionsOnByDefault: true,
-                                            directedEdges: true,
-                                            linkDistance: 2000,
-                                            nodeTypes: {
-                                                "type":
-                                                    ["Финансы", "Клиенты и продукты", "Обучение и рост", "Бизнес-процессы"]
-                                            },
-                                            nodeStyle: {
-                                                "all": {
-                                                    "borderWidth": function (d, radius) {
-                                                        return radius / 30;
-                                                    },
-                                                    "radius": function (d) {
-                                                        return 50;
-                                                    },
-                                                },
-                                                "Финансы": {
-                                                    "borderColor": "rgba(0, 0, 103, 1)",
-                                                    "color": "rgba(0, 0, 103, 0.50)",
-                                                    "selected": {
-                                                        "color": "#ffffff",
-                                                    },
-                                                    "highlighted": {
-                                                        "color": "#b4dcff"
-                                                    }
-                                                },
-                                                "Клиенты и продукты": {
-                                                    "borderColor": "rgba(198, 40, 40, 1)",
-                                                    "color": "rgba(198, 40, 40, 0.50)",
-                                                    "selected": {
-                                                        "color": "#ffffff",
-                                                    },
-                                                    "highlighted": {
-                                                        "color": "#EF9A9A"
-                                                    }
-                                                },
-                                                "Обучение и рост": {
-                                                    "borderColor": "rgba(46, 125, 50, 1)",
-                                                    "color": "rgba(46, 125, 50, 0.50)",
-                                                    "selected": {
-                                                        "color": "#ffffff",
-                                                    },
-                                                    "highlighted": {
-                                                        "color": "#43A047"
-                                                    }
-                                                },
-                                                "Бизнес-процессы": {
-                                                    "borderColor": "rgba(255, 145, 0, 1)",
-                                                    "color": "rgba(255, 145, 0, 0.50)",
-                                                    "selected": {
-                                                        "color": "#ffffff",
-                                                    },
-                                                    "highlighted": {
-                                                        "color": "#FFD180"
-                                                    }
-                                                }
-                                            },
-                                            edgeStyle: {
-                                                "all": {
-                                                    "width": function (d) {
-                                                        return 5
-                                                    }
-                                                }
-                                            }
-                                        });
-
-                                        var labels = [],
-                                        finances = [],
-                                        clients = [],
-                                        grow = [],
-                                        business = [],
-                                        colors = {
-                                            "Финансы": [],
-                                            "Клиенты и продукты": [],
-                                            "Обучение и рост": [],
-                                            "Бизнес-процессы": []
-                                        };
-
-                                        for (var i = 0; i < only_dirs.length; i++) {
-                                            finances.push(1);
-                                            clients.push(2);
-                                            grow.push(3);
-                                            business.push(4);
-                                            colors["Финансы"].push("transparent");
-                                            colors["Клиенты и продукты"].push("transparent");
-                                            colors["Обучение и рост"].push("transparent");
-                                            colors["Бизнес-процессы"].push("transparent");
-                                        }
-
-                                        for (var i = 0; i < only_dirs.length; i++) {
-                                            labels.push(only_dirs[i]["name"]);
-
-                                            for (var j = 0; j < only_dirs[i]["influences"].length; j++) {
-                                                var influence = only_dirs[i]["influences"][j],
-                                                    index = only_dirs.findIndex(p => p.name == influence);
-
-                                                colors[only_dirs[i]["group"]][i] = 'black';
-
-                                                if (only_dirs[index]["group"] != only_dirs[i]["group"]) {
-                                                    colors[only_dirs[index]["group"]][i] = 'grey';
-                                                    colors[only_dirs[i]["group"]][index] = 'white';
-                                                }
-                                            }
-                                        }
-
-                                        var keys = [];
-
-                                        for (var i = 0; i < only_dirs.length; i++) {
-                                            if (colors["Финансы"][i] != "transparent" && colors["Клиенты и продукты"][i] != "transparent"
-                                                && colors["Обучение и рост"][i] != "transparent" && colors["Бизнес-процессы"][i] != "transparent") {
-                                                keys.push(only_dirs[i]);
-                                            }
-                                        }
-
-                                        var config = {
-                                            type: 'radar',
-                                            data: {
-                                                labels: labels,
-                                                datasets: [
-                                                    {
-                                                        label: "Финансы",
-                                                        borderColor: "rgba(0, 0, 103, 1)",
-                                                        pointBackgroundColor: colors["Финансы"],
-                                                        pointBorderColor: 'transparent',
-                                                        pointBorderWidth: 2,
-                                                        radius: 7,
-                                                        fill: false,
-                                                        data: finances
-                                                    },
-                                                    {
-                                                        label: "Клиенты и продукты",
-                                                        borderColor: "rgba(198, 40, 40, 1)",
-                                                        pointBackgroundColor: colors["Клиенты и продукты"],
-                                                        pointBorderColor: 'transparent',
-                                                        pointBorderWidth: 2,
-                                                        radius: 7,
-                                                        fill: false,
-                                                        data: clients
-                                                    },
-                                                    {
-                                                        label: "Бизнес-процессы",
-                                                        borderColor: "rgba(255, 145, 0, 1)",
-                                                        pointBackgroundColor: colors["Бизнес-процессы"],
-                                                        pointBorderColor: 'transparent',
-                                                        pointBorderWidth: 2,
-                                                        radius: 7,
-                                                        fill: false,
-                                                        data: business
-                                                    },
-                                                    {
-                                                        label: "Обучение и рост",
-                                                        borderColor: "rgba(46, 125, 50, 1)",
-                                                        pointBackgroundColor: colors["Обучение и рост"],
-                                                        pointBorderColor: 'transparent',
-                                                        pointBorderWidth: 2,
-                                                        radius: 7,
-                                                        fill: false,
-                                                        data: grow
-                                                    }
-                                                ]
-                                            },
-                                            options: {
-                                                legend: {
-                                                    position: 'top',
-                                                },
-                                                title: {
-                                                    display: true,
-                                                    text: 'Карта звездного неба'
-                                                },
-                                                scale: {
-                                                    ticks: {
-                                                        beginAtZero: true,
-                                                        display: false
-                                                    }
-                                                }
-                                            }
-                                        };
-
-                                        document.getElementById("canvas").style.display = 'block';
-                                        window.myRadar = new Chart(document.getElementById("canvas"), config);
-                                        var div = document.createElement('div');
-                                        div.id = 'canvas_div';
-                                        div.innerHTML = "<span>" + "Ключевые элементы:" + "</span><br/>";
-
-                                        keys.forEach(function (el) {
-                                            div.innerHTML += "<span>" + el["name"] + "</span>" + "<br/>";
-                                        });
-
-                                        document.documentElement.appendChild(div);
-                                        show_strat_map();
-                                    };
-
-                                    div.appendChild(next_step);
                                     document.documentElement.appendChild(div);
+
+                                    Ext.create('Ext.Button', {
+                                        id: 'next_step',
+                                        text: 'Готово',
+                                        style: {
+                                            'background-color': '#475361',
+                                            'border-color': '#e4e4e4',
+                                            'color': '#d0d0d0'
+                                        },
+                                        renderTo: Ext.getBody(),
+                                        handler: function () {
+                                            {
+                                                matrix.style.visibility = false;
+
+                                                var data = {
+                                                    "nodes": [],
+                                                    "edges": [],
+                                                };
+
+                                                for (var i = 0; i < only_dirs.length; i++) {
+                                                    data['nodes'].push({
+                                                        "id": i,
+                                                        "title": only_dirs[i]["name"],
+                                                        "node_type": only_dirs[i]["group"],
+                                                        "type": only_dirs[i]["group"],
+                                                    });
+
+                                                    for (var j = 0; j < only_dirs[i]["influences"].length; j++) {
+                                                        var influence = only_dirs[i]["influences"][j];
+                                                        data["edges"].push({
+                                                            "source": i,
+                                                            "target": only_dirs.findIndex(p => p.name == influence)
+                                                        });
+                                                    }
+                                                }
+
+                                                var alch = document.getElementById("alchemy");
+                                                while (alch.childElementCount > 0)
+                                                    alch.removeChild(alch.firstElementChild);
+
+                                                alchemy = new Alchemy({
+                                                    dataSource: data,
+                                                    nodeCaption: "title",
+                                                    nodeCaptionsOnByDefault: true,
+                                                    directedEdges: true,
+                                                    linkDistance: 2000,
+                                                    nodeTypes: {
+                                                        "type":
+                                                            ["Финансы", "Клиенты и продукты", "Обучение и рост", "Бизнес-процессы"]
+                                                    },
+                                                    nodeStyle: {
+                                                        "all": {
+                                                            "borderWidth": function (d, radius) {
+                                                                return radius / 30;
+                                                            },
+                                                            "radius": function (d) {
+                                                                return 50;
+                                                            },
+                                                        },
+                                                        "Финансы": {
+                                                            "borderColor": "rgba(0, 0, 103, 1)",
+                                                            "color": "rgba(0, 0, 103, 0.50)",
+                                                            "selected": {
+                                                                "color": "#ffffff",
+                                                            },
+                                                            "highlighted": {
+                                                                "color": "#b4dcff"
+                                                            }
+                                                        },
+                                                        "Клиенты и продукты": {
+                                                            "borderColor": "rgba(198, 40, 40, 1)",
+                                                            "color": "rgba(198, 40, 40, 0.50)",
+                                                            "selected": {
+                                                                "color": "#ffffff",
+                                                            },
+                                                            "highlighted": {
+                                                                "color": "#EF9A9A"
+                                                            }
+                                                        },
+                                                        "Обучение и рост": {
+                                                            "borderColor": "rgba(46, 125, 50, 1)",
+                                                            "color": "rgba(46, 125, 50, 0.50)",
+                                                            "selected": {
+                                                                "color": "#ffffff",
+                                                            },
+                                                            "highlighted": {
+                                                                "color": "#43A047"
+                                                            }
+                                                        },
+                                                        "Бизнес-процессы": {
+                                                            "borderColor": "rgba(255, 145, 0, 1)",
+                                                            "color": "rgba(255, 145, 0, 0.50)",
+                                                            "selected": {
+                                                                "color": "#ffffff",
+                                                            },
+                                                            "highlighted": {
+                                                                "color": "#FFD180"
+                                                            }
+                                                        }
+                                                    },
+                                                    edgeStyle: {
+                                                        "all": {
+                                                            "width": function (d) {
+                                                                return 5
+                                                            }
+                                                        }
+                                                    }
+                                                });
+
+                                                var labels = [],
+                                                finances = [],
+                                                clients = [],
+                                                grow = [],
+                                                business = [],
+                                                colors = {
+                                                    "Финансы": [],
+                                                    "Клиенты и продукты": [],
+                                                    "Обучение и рост": [],
+                                                    "Бизнес-процессы": []
+                                                };
+
+                                                for (var i = 0; i < only_dirs.length; i++) {
+                                                    finances.push(1);
+                                                    clients.push(2);
+                                                    grow.push(3);
+                                                    business.push(4);
+                                                    colors["Финансы"].push("transparent");
+                                                    colors["Клиенты и продукты"].push("transparent");
+                                                    colors["Обучение и рост"].push("transparent");
+                                                    colors["Бизнес-процессы"].push("transparent");
+                                                }
+
+                                                for (var i = 0; i < only_dirs.length; i++) {
+                                                    labels.push(only_dirs[i]["name"]);
+
+                                                    for (var j = 0; j < only_dirs[i]["influences"].length; j++) {
+                                                        var influence = only_dirs[i]["influences"][j],
+                                                            index = only_dirs.findIndex(p => p.name == influence);
+
+                                                        colors[only_dirs[i]["group"]][i] = 'black';
+
+                                                        if (only_dirs[index]["group"] != only_dirs[i]["group"]) {
+                                                            colors[only_dirs[index]["group"]][i] = 'grey';
+                                                            colors[only_dirs[i]["group"]][index] = 'white';
+                                                        }
+                                                    }
+                                                }
+
+                                                var keys = [];
+
+                                                for (var i = 0; i < only_dirs.length; i++) {
+                                                    if (colors["Финансы"][i] != "transparent" && colors["Клиенты и продукты"][i] != "transparent"
+                                                        && colors["Обучение и рост"][i] != "transparent" && colors["Бизнес-процессы"][i] != "transparent") {
+                                                        keys.push(only_dirs[i]);
+                                                    }
+                                                }
+
+                                                var config = {
+                                                    type: 'radar',
+                                                    data: {
+                                                        labels: labels,
+                                                        datasets: [
+                                                            {
+                                                                label: "Финансы",
+                                                                borderColor: "rgba(0, 0, 103, 1)",
+                                                                pointBackgroundColor: colors["Финансы"],
+                                                                pointBorderColor: 'transparent',
+                                                                pointBorderWidth: 2,
+                                                                radius: 7,
+                                                                fill: false,
+                                                                data: finances
+                                                            },
+                                                            {
+                                                                label: "Клиенты и продукты",
+                                                                borderColor: "rgba(198, 40, 40, 1)",
+                                                                pointBackgroundColor: colors["Клиенты и продукты"],
+                                                                pointBorderColor: 'transparent',
+                                                                pointBorderWidth: 2,
+                                                                radius: 7,
+                                                                fill: false,
+                                                                data: clients
+                                                            },
+                                                            {
+                                                                label: "Бизнес-процессы",
+                                                                borderColor: "rgba(255, 145, 0, 1)",
+                                                                pointBackgroundColor: colors["Бизнес-процессы"],
+                                                                pointBorderColor: 'transparent',
+                                                                pointBorderWidth: 2,
+                                                                radius: 7,
+                                                                fill: false,
+                                                                data: business
+                                                            },
+                                                            {
+                                                                label: "Обучение и рост",
+                                                                borderColor: "rgba(46, 125, 50, 1)",
+                                                                pointBackgroundColor: colors["Обучение и рост"],
+                                                                pointBorderColor: 'transparent',
+                                                                pointBorderWidth: 2,
+                                                                radius: 7,
+                                                                fill: false,
+                                                                data: grow
+                                                            }
+                                                        ]
+                                                    },
+                                                    options: {
+                                                        legend: {
+                                                            position: 'top',
+                                                        },
+                                                        title: {
+                                                            display: true,
+                                                            text: 'Карта звездного неба'
+                                                        },
+                                                        scale: {
+                                                            ticks: {
+                                                                beginAtZero: true,
+                                                                display: false
+                                                            }
+                                                        }
+                                                    }
+                                                };
+
+                                                window.myRadar = new Chart(document.getElementById("canvas"), config);
+                                                var div = document.createElement('div');
+                                                div.id = 'canvas_div';
+                                                div.innerHTML = "<span>" + "Ключевые элементы:" + "</span><br/>";
+
+                                                keys.forEach(function (el) {
+                                                    div.innerHTML += "<span>" + el["name"] + "</span>" + "<br/>";
+                                                });
+
+                                                document.documentElement.appendChild(div);
+                                                show_strat_map();
+                                            };
+                                        }
+                                    });
+
+                                    
                                 }
                                 else {
                                     show_table();
@@ -805,6 +814,7 @@ function show_purposes_table() {
     Ext.getCmp('dir') ? Ext.getCmp('dir').hide() : false;
     Ext.getCmp('select') ? Ext.getCmp('select').hide() : false;
     document.getElementById('div') ? document.getElementById('div').style.display = 'none' : false;
+    Ext.getCmp('next_step') ? Ext.getCmp('next_step').hide() : false;
     document.getElementById('alchemy') ? document.getElementById('alchemy').style.display = 'none' : false;
     document.getElementById('canvas') ? document.getElementById('canvas').style.display = 'none' : false;
     document.getElementById('canvas_div') ? document.getElementById('canvas_div').style.display = 'none' : false;
@@ -816,6 +826,7 @@ function show_group_dirs() {
     Ext.getCmp('tree') ? Ext.getCmp('tree').hide() : false;
     Ext.getCmp('select') ? Ext.getCmp('select').hide() : false;
     document.getElementById('div') ? document.getElementById('div').style.display = 'none' : false;
+    Ext.getCmp('next_step') ? Ext.getCmp('next_step').hide() : false;
     document.getElementById('alchemy') ? document.getElementById('alchemy').style.display = 'none' : false;
     document.getElementById('canvas') ? document.getElementById('canvas').style.display = 'none' : false;
     document.getElementById('canvas_div') ? document.getElementById('canvas_div').style.display = 'none' : false;
@@ -827,6 +838,7 @@ function show_links() {
     Ext.getCmp('tree') ? Ext.getCmp('tree').hide() : false;
     Ext.getCmp('dir') ? Ext.getCmp('dir').hide() : false;
     document.getElementById('div') ? document.getElementById('div').style.display = 'none' : false;
+    Ext.getCmp('next_step') ? Ext.getCmp('next_step').hide() : false;
     document.getElementById('alchemy') ? document.getElementById('alchemy').style.display = 'none' : false;
     document.getElementById('canvas') ? document.getElementById('canvas').style.display = 'none' : false;
     document.getElementById('canvas_div') ? document.getElementById('canvas_div').style.display = 'none' : false;
@@ -843,12 +855,14 @@ function show_table() {
     document.getElementById('canvas_div') ? document.getElementById('canvas_div').style.display = 'none' : false;
 
     document.getElementById('div') ? document.getElementById('div').style.display = 'block' : alert("Вы еще не переходили к этому пункту");
+    Ext.getCmp('next_step') ? Ext.getCmp('next_step').show() : false;
 }
 
 function show_strat_map() {
     Ext.getCmp('tree') ? Ext.getCmp('tree').hide() : false;
     Ext.getCmp('dir') ? Ext.getCmp('dir').hide() : false;
     Ext.getCmp('select') ? Ext.getCmp('select').hide() : false;
+    Ext.getCmp('next_step') ? Ext.getCmp('next_step').hide() : false;
     document.getElementById('div') ? document.getElementById('div').style.display = 'none' : false;
     document.getElementById('canvas') ? document.getElementById('canvas').style.display = 'none' : false;
     document.getElementById('canvas_div') ? document.getElementById('canvas_div').style.display = 'none' : false;
@@ -860,6 +874,7 @@ function show_stars() {
     Ext.getCmp('tree') ? Ext.getCmp('tree').hide() : false;
     Ext.getCmp('dir') ? Ext.getCmp('dir').hide() : false;
     Ext.getCmp('select') ? Ext.getCmp('select').hide() : false;
+    Ext.getCmp('next_step') ? Ext.getCmp('next_step').hide() : false;
     document.getElementById('div') ? document.getElementById('div').style.display = 'none' : false;
     document.getElementById('alchemy') ? document.getElementById('alchemy').style.display = 'none' : false;
 
