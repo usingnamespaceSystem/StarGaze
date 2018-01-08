@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>StarGaze</title>
+    {%load staticfiles%}
+    <script type="text/javascript" src="{% static "js/ext-6.2.0/build/ext-all-debug.js" %}"></script>   
+    {% csrf_token %}       
+    <script type="text/javascript" src="{% static "js/app.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/lodash.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/d3.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/alchemy.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/ext-6.2.0/build/classic/theme-triton/theme-triton-debug.js" %}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static "css\vendor.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css\alchemy.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "js\ext-6.2.0\build\classic\theme-triton\resources\theme-triton-all-debug.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css\style.css" %}">
+</head>
+<body>
+    <div class="menu">
+        <button onclick="show_purposes_table()">Таблица целей</button>
+        <button onclick="show_group_dirs()">Группировка направлений</button>
+        <button onclick="show_links()">Определение связей</button>
+        <button onclick="show_table()">Матрица смежности</button>
+        <button onclick="show_strat_map()">Стратегическая карта</button>
+        <button onclick="show_stars()">Карта звездного неба</button>
+        <button onclick="show_strat_map()">Сохранить</button>
+        <button onclick="show_stars()">Загрузить</button>
+    </div>
+    <div id="alchemy" class="alchemy"></div>
+    <canvas id="canvas" style="display:none"></canvas>
+</body>
+</html>

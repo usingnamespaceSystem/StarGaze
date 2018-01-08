@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    {%load staticfiles%}
+    <script type="text/javascript" src="{% static "js/ext-all-debug.js" %}"></script>       
+    <script type="text/javascript" src="{% static "js/app.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/theme-triton-debug.js" %}"></script>
+    <link type="text/css" rel="stylesheet" src="{% static "css/theme-triton-all-debug.css" %}">
+</head>
+<body>
+    <table>
+        <tr class="row">
+            <td colspan="3">Пространство инициирования целей</td>
+            <td rowspan="2">Количественная оценка цели</td>
+            <td rowspan="2">Стратегические направления, реализующие цели</td>
+        </tr>
+        <tr class="row">
+            <td>Категория пространства</td>
+            <td>Наименование пространства</td>
+            <td>Наименование целей</td>
+        </tr>
+        <tr class="row">
+            <td rowspan="2">Цели, инициируемые вышестоящей системой</td>
+            <td>Федеральное и краевое законодательство</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+        <tr class="row">
+            <td>Экономика</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+        <tr class="row">
+            <td rowspan="4">Цели, инициируемые подведомственными системами</td>
+            <td>Розничные продажи</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+        <tr class="row">
+            <td>Маркетинг</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+        <tr class="row">
+            <td>Транспорт/Логистика</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+        <tr class="row">
+            <td>ИТ</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+        <tr class="row">
+            <td rowspan="4">Цели, инициируемые существенной средой</td>
+            <td>Конкуренты</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+        <tr class="row">
+            <td>СМИ/Социальные сети</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+        <tr class="row">
+            <td>Партнеры</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+        <tr class="row">
+            <td>Клиенты</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+        <tr class="row">
+            <td rowspan="3">Цели, инициируемые исследуемой системой</td>
+            <td>Бренд</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+        <tr class="row">
+            <td>Ассортимент</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+        <tr class="row">
+            <td>Финансы</td>
+            <td><input type="text"></td>
+            <td><input type="text" required></td>
+            <td><textarea required></textarea></td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,48 @@
+﻿body
+{
+}
+
+/*ячейки дерева*/
+.x-grid-cell-inner {
+    
+}
+textarea {
+    border-style: none;
+    width: 100%;
+    height: 100%;
+    font: inherit;
+
+}
+
+#matrix td,th {
+    text-align: center;
+    border: solid 0.5px gray;
+    font-size: 25px;
+
+}
+
+#matrix td {
+    cursor: pointer;
+}
+#matrix td:hover {
+    background-color: cornflowerblue;
+}
+
+.menu {
+    z-index: 9999;
+    width: 100%;
+    background-color: #5fa2dd;
+    border-bottom: solid 1px white;
+}
+
+.menu button {
+    outline: none;
+    border: none;
+    background-color: transparent;
+    width: 10%;
+    color: #f0f0f0;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+    line-height: 20px;
+}

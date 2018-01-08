@@ -57,7 +57,10 @@ ROOT_URLCONF = 'StarGaze.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'StarGaze/static/templates/'),
+            os.path.join(BASE_DIR, 'StarGaze/static/js/'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +72,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'StarGaze.wsgi.application'
 
@@ -122,4 +126,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
+STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['StarGaze/']))
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'StarGaze/static/'),
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
