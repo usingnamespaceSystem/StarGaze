@@ -31,8 +31,9 @@
         <button onclick="show_table()">Матрица смежности</button>
         <button onclick="show_strat_map()">Стратегическая карта</button>
         <button onclick="show_stars()">Карта звездного неба</button>
-        <button onclick="show_strat_map()">Сохранить</button>
-        <button onclick="show_stars()">Загрузить</button>
+        <button onclick="save()">Сохранить</button>
+        <button onclick="document.getElementById('file-input').click();" >Загрузить</button>
+        <input id="file-input" type="file" name="name" onchange="upload(event)" style="display: none;" />
     </div>
     <div id="alchemy" class="alchemy"></div>
     <canvas id="canvas" style="display:none"></canvas>

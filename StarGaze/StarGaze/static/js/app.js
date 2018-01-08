@@ -53,8 +53,7 @@
                         }
                     },
                     {
-                        text: 'Следующий шаг',
-                        minHeight: 20,
+                        text: 'Готово',
                         handler: function () {
                             var root = Ext.getCmp('tree').getRootNode(),
                                 json = [];
@@ -106,7 +105,15 @@
                                     'X-CSRFToken': cookie
                                 },
                                 success: function (response, opts) {
-                                    var directions = JSON.parse(response.responseText);
+                                    var directions;
+
+                                    if (load) {
+                                        directions = only_dirs;
+                                    }
+                                    else {
+                                        directions = JSON.parse(response.responseText);
+                                    }
+
                                     Ext.getCmp('tree').hide();
 
                                     Ext.create('Ext.data.Store', {
@@ -240,60 +247,63 @@ Ext.define('Directions', {
     }],
     tbar: [
         {
-            text: 'Следующий шаг',
-            minHeight: 20,
+            text: 'Готово',
             handler: function () {
                 var store = Ext.getCmp('dir').store.getData().items,
                     json = JSON.parse(Ext.util.Cookies.get('purposes'));
 
-                for (var c = 0; c < store.length; c++) {
-                    var item = store[c].getData(),
-                        direction = item.name,
-                        group = item.group;
+                if (!load) {
+                    for (var c = 0; c < store.length; c++) {
+                        var item = store[c].getData(),
+                            direction = item.name,
+                            group = item.group;
 
-                    for (var i = 0; i < json.length; i++) {
-                        var items = json[i].items;
+                        for (var i = 0; i < json.length; i++) {
+                            var items = json[i].items;
 
-                        for (var j = 0; j < items.length; j++) {
-                            var row = items[j];
+                            for (var j = 0; j < items.length; j++) {
+                                var row = items[j];
 
-                            for (var index in row['direction']) {
-                                var dir = row['direction'][index];
+                                for (var index in row['direction']) {
+                                    var dir = row['direction'][index];
 
-                                if (dir == direction) {
-                                    row['direction'][index] = {
-                                        'name': dir,
-                                        'group': group
-                                    };
-                                    only_dirs.push({
-                                        'name': dir,
-                                        'group': group
-                                    });
+                                    if (dir == direction) {
+                                        row['direction'][index] = {
+                                            'name': dir,
+                                            'group': group
+                                        };
+                                        only_dirs.push({
+                                            'name': dir,
+                                            'group': group
+                                        });
+                                    }
                                 }
                             }
                         }
                     }
+
+
+                    only_dirs.sort(function (a, b) {
+                        map = {
+                            "Финансы": 0,
+                            "Клиенты и продукты": 1,
+                            "Бизнес-процессы": 2,
+                            "Обучение и рост": 3
+                        };
+
+                        if (map[a.group] > map[b.group]) {
+                            return 1;
+                        }
+                        if (map[a.group] < map[b.group]) {
+                            return -1;
+                        }
+
+                        return 0;
+                    });
+
+                    Ext.util.Cookies.set('purposes', JSON.stringify(json));
                 }
 
-                only_dirs.sort(function (a, b) {
-                    map = {
-                        "Финансы": 0,
-                        "Клиенты и продукты": 1,
-                        "Бизнес-процессы": 2,
-                        "Обучение и рост": 3
-                    };
-
-                    if (map[a.group] > map[b.group]) {
-                        return 1;
-                    }
-                    if (map[a.group] < map[b.group]) {
-                        return -1;
-                    }
-
-                    return 0;
-                });
-
-                Ext.util.Cookies.set('purposes', JSON.stringify(json));
                 Ext.getCmp('dir').hide();
 
                 Ext.create('Ext.panel.Panel', {
@@ -390,7 +400,7 @@ Ext.define('Directions', {
 
                                     div.appendChild(matrix);
                                     var next_step = document.createElement('button');
-                                    next_step.innerText = 'Следующий шаг';
+                                    next_step.innerText = 'Готово';
                                     next_step.onclick = function (e) {
                                         matrix.style.visibility = false;
 
@@ -416,14 +426,16 @@ Ext.define('Directions', {
                                             }
                                         }
 
-                                        alchemy.remove ? alchemy.remove.nodes(alchemy.get.nodes().all()) : false;
+                                        var alch = document.getElementById("alchemy");
+                                        while (alch.childElementCount > 0)
+                                            alch.removeChild(alch.firstElementChild);
 
-                                        alchemy.begin({
+                                        alchemy = new Alchemy({
                                             dataSource: data,
                                             nodeCaption: "title",
                                             nodeCaptionsOnByDefault: true,
                                             directedEdges: true,
-                                            linkDistance: 1000,
+                                            linkDistance: 2000,
                                             nodeTypes: {
                                                 "type":
                                                     ["Финансы", "Клиенты и продукты", "Обучение и рост", "Бизнес-процессы"]
@@ -610,7 +622,7 @@ Ext.define('Directions', {
                                         });
 
                                         document.documentElement.appendChild(div);
-
+                                        show_strat_map();
                                     };
 
                                     div.appendChild(next_step);
@@ -673,7 +685,8 @@ var row_count = 0,
         "Бизнес-процессы": ["Финансы", "Клиенты и продукты", "Бизнес-процессы"],
         "Обучение и рост": ["Бизнес-процессы", "Клиенты и продукты", "Обучение и рост"]
     },
-    only_dirs = [];
+    only_dirs = [],
+    load = false;
 
 var create_select_text = function () {
     for (var j = 0; j < only_dirs.length; j++) {
@@ -852,4 +865,56 @@ function show_stars() {
 
     document.getElementById('canvas') ? document.getElementById('canvas').style.display = 'block' : alert("Вы еще не переходили к этому пункту");
     document.getElementById('canvas_div') ? document.getElementById('canvas_div').style.display = 'block' : false;
+}
+
+function save() {
+    var json_data = "data:text/json;charset=utf-8," + Ext.util.Cookies.get('purposes') + "\n" + JSON.stringify(only_dirs);
+    var encodedUri = encodeURI(json_data);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "StarGaze.stz");
+    document.body.appendChild(link);
+
+    link.click();
+}
+
+function upload(event) {
+    var json_file = event.target;
+        reader = new FileReader();
+
+    
+    reader.onload = function () {
+        var json_string = reader.result;
+        var json_array = json_string.split('\n');
+        json_tree = JSON.parse(json_array[0]);
+        json_dirs = JSON.parse(json_array[1]);
+
+        load = true;
+        only_dirs = json_dirs;
+
+        var root = Ext.getCmp('tree').getRootNode();
+
+        for (var i = 0; i < json_tree.length; i++) {
+            var space = json_tree[i];
+
+            for (var j = 0; j < space["items"].length; j++) {
+                var item = space["items"][j];
+                var str = "";
+                for (var dir = 0; dir < item["direction"].length; dir++) {
+                    str += item["direction"][dir]['name'] + " \n";
+                }
+
+                root.childNodes[i].appendChild({
+                    leaf: true,
+                    space_name: item["name"],
+                    purpose: item["purpose"],
+                    perc: item["percentage"],
+                    direction: str
+                });
+            }
+        }
+    };
+
+    reader.readAsText(json_file.files[0]);
+   
 }

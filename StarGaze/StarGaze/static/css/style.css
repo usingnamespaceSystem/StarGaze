@@ -24,8 +24,11 @@ textarea {
 #matrix td {
     cursor: pointer;
 }
-#matrix td:hover {
+#matrix tr:hover {
     background-color: cornflowerblue;
+}
+#matrix td:hover {
+    border: solid 1px white;
 }
 
 .menu {
