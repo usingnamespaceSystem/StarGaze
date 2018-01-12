@@ -49,9 +49,13 @@
     <Content Include="StarGaze\static\css\alchemy.css" />
     <Content Include="StarGaze\static\css\style.css" />
     <Content Include="StarGaze\static\css\vendor.css" />
+    <Content Include="StarGaze\static\icons\ic_browser.png" />
+    <Content Include="StarGaze\static\icons\ic_camera.png" />
+    <Content Include="StarGaze\static\icons\logo.png" />
     <Content Include="StarGaze\static\js\alchemy.js" />
     <Content Include="StarGaze\static\js\app.js" />
     <Content Include="StarGaze\static\js\d3.js" />
+    <Content Include="StarGaze\static\js\html2canvas.js" />
     <Content Include="StarGaze\static\js\lodash.js" />
     <Content Include="StarGaze\static\js\require.js" />
     <Content Include="StarGaze\static\js\vendor.js" />
@@ -62,6 +66,7 @@
     <Folder Include="StarGaze\static\" />
     <Folder Include="StarGaze\static\js\" />
     <Folder Include="StarGaze\static\css\" />
+    <Folder Include="StarGaze\static\icons\" />
     <Folder Include="StarGaze\static\templates\" />
   </ItemGroup>
   <ItemGroup>

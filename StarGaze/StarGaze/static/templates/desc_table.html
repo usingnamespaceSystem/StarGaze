@@ -12,6 +12,7 @@
     <script type="text/javascript" src="{% static "js/d3.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor.js" %}"></script>
     <script type="text/javascript" src="{% static "js/alchemy.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/html2canvas.js" %}"></script>
     <script type="text/javascript" src="{% static "js/ext-6.2.0/build/classic/theme-triton/theme-triton-debug.js" %}"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js" crossorigin="anonymous"></script>
@@ -25,6 +26,7 @@
 </head>
 <body>
     <div class="menu">
+        <img src="{% static "icons/logo.png" %}">
         <button onclick="show_purposes_table()">Таблица целей</button>
         <button onclick="show_group_dirs()">Группировка направлений</button>
         <button onclick="show_links()">Определение связей</button>
@@ -34,6 +36,11 @@
         <button onclick="save()">Сохранить</button>
         <button onclick="document.getElementById('file-input').click();" >Загрузить</button>
         <input id="file-input" type="file" name="name" onchange="upload(event)" style="display: none;" />
+    </div>
+    <div id="capture" >
+        <img src="{% static "icons/ic_camera.png" %}" onclick="capture()">
+    </div>
+    <div id="screenshot" onclick="close_wnd()">
     </div>
     <div id="alchemy" class="alchemy"></div>
     <canvas id="canvas" style="display:none"></canvas>
